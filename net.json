@@ -1,0 +1,14 @@
+{
+  "tm-version": "0.26.0",
+  "pex": false,
+  "nodes": [
+    "be.tendermint.com",
+    "gb.tendermint.com",
+    "sg.tendermint.com",
+    "us.tendermint.com"
+  ],
+  "p2p-port": 46656,
+  "rpc-port": 46657,
+  "proxy-port": 46658,
+  "logging-port": 46660
+}
