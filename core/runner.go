@@ -6,8 +6,8 @@ import (
 	"github.com/spf13/viper"
 	"os"
 	"os/exec"
-	"strings"
 	"strconv"
+	"strings"
 )
 
 const genDirName = "./basenet"
@@ -20,14 +20,14 @@ const proxyPortKey = "proxy-port"
 const loggingPortKey = "logging-port"
 
 type App struct {
-	tmVersion  string
-	pexEnabled bool
-	nodes      []string
-	p2pPort    int
-	rpcPort    int
-	proxyPort int
+	tmVersion   string
+	pexEnabled  bool
+	nodes       []string
+	p2pPort     int
+	rpcPort     int
+	proxyPort   int
 	loggingPort int
-	config    *viper.Viper
+	config      *viper.Viper
 	nodeConfigs []*viper.Viper
 }
 
@@ -117,7 +117,7 @@ func (app *App) generateTestnet() error {
 		return fmt.Errorf("tendermint testnet output is nil")
 	}
 	if !strings.Contains(string(output), "Successfully") {
-	   return fmt.Errorf("tendermint testnet did not return success: %s", string(output))
+		return fmt.Errorf("tendermint testnet did not return success: %s", string(output))
 	}
 	return nil
 }
@@ -136,7 +136,7 @@ func (app *App) readTestnetConfigs() error {
 			return fmt.Errorf("cannot load node%d 'config.toml' file: %s \n", i, err)
 		}
 
-	 	log.Infof("%v", app.nodeConfigs[i].AllKeys())
+		log.Infof("%v", app.nodeConfigs[i].AllKeys())
 		peers := app.nodeConfigs[i].GetString("p2p.persistent_peers")
 
 		app.nodeConfigs[i].Set("moniker", fmt.Sprintf("node%d", i))
