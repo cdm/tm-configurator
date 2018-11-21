@@ -1,5 +1,4 @@
-# tm-configurator
-Tendermint testnet configs++
+# Custom Configurator binary app for Tendermint testnets
 
 Currently bundled with MacOSX Darwin tendermint binaries.
 
