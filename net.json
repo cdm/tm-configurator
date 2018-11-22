@@ -4,10 +4,9 @@
   "mempool-size": 5000,
   "tx-cache-size": 10000,
   "nodes": [
-    "be.devnet.cdm.io",
-    "gb.devnet.cdm.io",
-    "sg.devnet.cdm.io",
-    "us.devnet.cdm.io"
+    "gb.cdm.io",
+    "sg.cdm.io",
+    "us.cdm.io"
   ],
   "p2p-port": 46656,
   "rpc-port": 46657,

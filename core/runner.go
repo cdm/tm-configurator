@@ -161,7 +161,7 @@ func (app *App) readTestnetConfigs() error {
 		app.nodeConfigs[i].Set("proxy_app", fmt.Sprintf("tcp://127.0.0.1:%d", app.proxyPort))
 		app.nodeConfigs[i].Set("p2p.laddr", fmt.Sprintf("tcp://0.0.0.0:%d", app.p2pPort))
 		for j := 0; j < len(app.nodes); j++ {
-			peers = strings.Replace(peers, fmt.Sprintf("192.168.0.%d:26656", j), fmt.Sprintf("%s:%d", app.nodes[j], app.p2pPort), 1)
+			peers = strings.Replace(peers, fmt.Sprintf("192.168.0.%d:26656", j+1), fmt.Sprintf("%s:%d", app.nodes[j], app.p2pPort), 1)
 		}
 		log.Info(peers)
 		app.nodeConfigs[i].Set("p2p.persistent_peers", peers)
