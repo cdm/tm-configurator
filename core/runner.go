@@ -14,6 +14,8 @@ const genDirName = "./basenet"
 const versionKey = "tm-version"
 const pexKey = "pex"
 const nodesKey = "nodes"
+const mempoolSizeKey = "mempool-size"
+const txCacheKeyKey = "tx-cache-size"
 const p2pPortKey = "p2p-port"
 const rpcPortKey = "rpc-port"
 const proxyPortKey = "proxy-port"
@@ -27,6 +29,8 @@ type App struct {
 	rpcPort     int
 	proxyPort   int
 	loggingPort int
+	txCacheSize int
+	memPoolSize int
 	config      *viper.Viper
 	nodeConfigs []*viper.Viper
 }
@@ -47,13 +51,21 @@ func (app *App) Run() {
 	}
 	app.updateConfig()
 	app.reportCustomConfig()
-	app.removeExisting()
+	err = app.removeExisting()
+	if err != nil {
+		log.Error(err.Error())
+		return
+	}
 	app.generateTestnet()
 	if err != nil {
 		log.Error(err.Error())
 		return
 	}
-	app.readTestnetConfigs()
+	err = app.readTestnetConfigs()
+	if err != nil {
+		log.Error(err.Error())
+		return
+	}
 	log.Infof("done.")
 }
 
@@ -65,6 +77,8 @@ func (app *App) setDefaults() {
 	app.config.SetDefault(rpcPortKey, 26657)
 	app.config.SetDefault(proxyPortKey, 26658)
 	app.config.SetDefault(loggingPortKey, 26660)
+	app.config.SetDefault(mempoolSizeKey, 5000)
+	app.config.SetDefault(txCacheKeyKey, 10000)
 }
 
 func (app *App) updateConfig() {
@@ -75,6 +89,8 @@ func (app *App) updateConfig() {
 	app.rpcPort = app.config.GetInt(rpcPortKey)
 	app.proxyPort = app.config.GetInt(proxyPortKey)
 	app.loggingPort = app.config.GetInt(loggingPortKey)
+	app.txCacheSize = app.config.GetInt(txCacheKeyKey)
+	app.memPoolSize = app.config.GetInt(mempoolSizeKey)
 }
 
 func (app *App) readCustomConfig() error {
@@ -97,6 +113,8 @@ func (app *App) reportCustomConfig() {
 	log.Infof(">> rpc-port: %d", app.rpcPort)
 	log.Infof(">> proxy-port: %d", app.proxyPort)
 	log.Infof(">> logging-port: %d", app.loggingPort)
+	log.Infof(">> tx-cache-size: %d", app.txCacheSize)
+	log.Infof(">> mempool-size: %d", app.memPoolSize)
 }
 
 func (app *App) removeExisting() error {
@@ -147,10 +165,11 @@ func (app *App) readTestnetConfigs() error {
 		}
 		log.Info(peers)
 		app.nodeConfigs[i].Set("p2p.persistent_peers", peers)
+		app.nodeConfigs[i].Set("p2p.cache_size", app.txCacheSize)
+		app.nodeConfigs[i].Set("p2p.size", app.memPoolSize)
+		app.nodeConfigs[i].Set("p2p.pex", strconv.FormatBool(app.pexEnabled))
 		app.nodeConfigs[i].Set("instrumentation.prometheus_listen_addr", fmt.Sprintf(":%d", app.loggingPort))
 		app.nodeConfigs[i].Set("rpc.laddr", fmt.Sprintf("tcp://0.0.0.0:%d", app.rpcPort))
-		app.nodeConfigs[i].Set("p2p.pex", strconv.FormatBool(app.pexEnabled))
-
 		app.nodeConfigs[i].WriteConfig()
 
 		log.Infof("updated tendermint generated config for node%d with custom properties", i)

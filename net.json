@@ -1,11 +1,13 @@
 {
-  "tm-version": "0.26.0",
+  "tm-version": "0.22.8",
   "pex": false,
+  "mempool-size": 5000,
+  "tx-cache-size": 10000,
   "nodes": [
-    "be.tendermint.com",
-    "gb.tendermint.com",
-    "sg.tendermint.com",
-    "us.tendermint.com"
+    "be.devnet.cdm.io",
+    "gb.devnet.cdm.io",
+    "sg.devnet.cdm.io",
+    "us.devnet.cdm.io"
   ],
   "p2p-port": 46656,
   "rpc-port": 46657,
