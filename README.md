@@ -1,4 +1,4 @@
-# Custom Configurator binary app for Tendermint testnets
+# Basic configurator for creating custom Tendermint network configs.
 
 Currently bundled with MacOSX Darwin tendermint binaries.
 
